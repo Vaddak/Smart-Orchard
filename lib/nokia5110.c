@@ -16,6 +16,10 @@ spi_device_handle_t spi;
 
 // Fuente 5x7 para caracteres
 const uint8_t font5x7[][5] = {
+
+    // Cada caracter se presenta por 5 bytes, 
+    // cada byte representa una columna de
+    // 8 bits en la matriz de puntos del caracter.
     {0x00, 0x00, 0x00, 0x00, 0x00}, // (space)
     {0x00, 0x00, 0x5F, 0x00, 0x00}, // !
     {0x00, 0x07, 0x00, 0x07, 0x00}, // "
@@ -116,23 +120,24 @@ const uint8_t font5x7[][5] = {
 
 
 void lcd_send_byte(uint8_t data, bool is_data) {
-   gpio_set_level(DC_PIN, is_data);
-   spi_transaction_t t;
-   memset(&t, 0, sizeof(t));
-   t.length = 8; // Transmisión de 8 bits
-   t.tx_buffer = &data;
-   esp_err_t ret = spi_device_transmit(spi, &t);
+   gpio_set_level(DC_PIN, is_data); // Establece el pin DC según si es un dato o un comando
+   spi_transaction_t t; // Estructura que representa una transacción SPI.
+   memset(&t, 0, sizeof(t)); // Inicializa la estructura de transacción SPI
+   t.length = 8; // Longitud de la transmisión en bits
+   t.tx_buffer = &data; // Apunta al buffer de transmisión
+   esp_err_t ret = spi_device_transmit(spi, &t); // Envía la transacción SPI
    if (ret != ESP_OK) {
        printf("Error en la transmisión SPI: %d\n", ret);
    }
 }
 
 void LCD_init() {
-   gpio_set_direction(RST_PIN, GPIO_MODE_OUTPUT);
-   gpio_set_direction(DC_PIN, GPIO_MODE_OUTPUT);
+   // Configuración de pines como salidas
+   gpio_set_direction(RST_PIN, GPIO_MODE_OUTPUT); 
+   gpio_set_direction(DC_PIN, GPIO_MODE_OUTPUT); 
    gpio_set_direction(SCE_PIN, GPIO_MODE_OUTPUT);
 
-   gpio_set_level(RST_PIN, 0);
+   gpio_set_level(RST_PIN, 0); // Reinicio del display
    vTaskDelay(100 / portTICK_PERIOD_MS);
    gpio_set_level(RST_PIN, 1);
 
@@ -141,7 +146,7 @@ void LCD_init() {
    lcd_send_byte(0x21, false); // Modo extendido
    lcd_send_byte(0xB1, false); // Ajuste de contraste
    lcd_send_byte(0x04, false); // Coeficiente de temperatura
-   lcd_send_byte(0x14, false); // Bias mode 1:48
+   lcd_send_byte(0x14, false); // Configura el modo de bias
    lcd_send_byte(0x20, false); // Modo básico
    lcd_send_byte(0x0C, false); // Modo normal
    printf("Comandos de inicialización enviados\n");
