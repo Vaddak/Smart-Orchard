@@ -1,5 +1,5 @@
 # Smart-Orchard
-ESP32-based smart and autonomous orchard with IoT implementation.
+ESP32-based smart and autonomous orchard.
 
 
 Link para la bitácora que lleva registro del desarrollo del proyecto
