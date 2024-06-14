@@ -18,11 +18,12 @@ float humidity = 0.;
 float temperature = 0.;
 
 // == set the DHT used pin=========================================
-
+/*
 void setDHTgpio( int gpio )
 {
    DHTgpio = gpio;
 }
+*/
 
 // == get temp & hum =============================================
 
