@@ -16,3 +16,5 @@ El sistema activará desde el main dos actuadores por relay:
  - Ventilador (motor DC con hélice) que se activará para disminuir la temperatura
 
 
+
+![PINOUT](https://github.com/Vaddak/Smart-Orchard/assets/62626110/a1f2607c-b4fe-4bd2-9fa9-5aa3a64460b3)
